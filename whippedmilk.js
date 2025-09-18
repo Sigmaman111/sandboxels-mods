@@ -1,4 +1,4 @@
-// Whipped Milk Mod for Sandboxels
+// Whipped Milk Mix Tool Mod for Sandboxels
 
 // Make sure base elements exist, otherwise define placeholders
 if(!elements.milk) {
@@ -46,14 +46,32 @@ elements.whipped_milk = {
     stateLow: "solid_milk",
 };
 
-// Reaction: holding 1 while mixing with milk makes whipped milk
-elements.milk.reactions = elements.milk.reactions || {};
-elements.milk.reactions.whipped_milk = {
-    "elem1": "whipped_milk",
-    "elem2": "whipped_milk",
-    "chance": 0.5,
-    "condition": function(pixel, otherPixel) {
-        // Only trigger if the player is holding the "1" key
-        return keys[49]; // 49 = keycode for "1"
+// Add whipping logic to milk
+elements.milk.tick = function(pixel) {
+    // If pixel is currently selected by Mix tool
+    if(pixelBeingMixed(pixel)) {
+        if(!pixel.whipTimer) {
+            pixel.whipTimer = 0;
+        }
+        pixel.whipTimer++;
+
+        // After 600 ticks (~10s), turn into whipped milk
+        if(pixel.whipTimer >= 600) {
+            changePixel(pixel, "whipped_milk");
+            return;
+        }
+    } else {
+        // Reset if not mixing
+        pixel.whipTimer = 0;
     }
+
+    // Default liquid behavior
+    doDefaults(pixel);
 };
+
+// Helper: check if Mix tool is being used on this pixel
+function pixelBeingMixed(pixel) {
+    return currentTool === "mix" && mouseDown &&
+           mouseX >= pixel.x && mouseX < pixel.x+1 &&
+           mouseY >= pixel.y && mouseY < pixel.y+1;
+}
