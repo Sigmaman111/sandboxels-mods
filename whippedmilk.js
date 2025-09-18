@@ -11,13 +11,13 @@
 // If it is hosted somewhere else, you can use the full URL, including the HTTPS://.
 
 // Adding elements:
-elements.mustard = {
+elements.whipped_milk = {
     color: "#ffff00",
     behavior: behaviors.LIQUID,
     category: "liquids",
     state: "liquid",
     density: 1100,
-    viscosity: 60000,
+    viscosity: 600000000,
 }
 
 // Changing existing elements:
