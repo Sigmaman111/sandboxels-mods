@@ -1,6 +1,6 @@
-// Whipped Milk Mix Tool Mod for Sandboxels
+// Whipped Milk Inventory Mod for Sandboxels
 
-// Make sure base elements exist, otherwise define placeholders
+// Base elements (in case they don’t exist)
 if(!elements.milk) {
     elements.milk = {
         color: "#ffffff",
@@ -31,11 +31,11 @@ if(!elements.solid_milk) {
     };
 }
 
-// Define whipped milk
+// Define Whipped Milk as a selectable item in inventory
 elements.whipped_milk = {
     color: "#fffdd0",
     behavior: behaviors.LIQUID,
-    category: "liquids",
+    category: "liquids",  // shows up in the Liquids tab
     state: "liquid",
     density: 1020,
 
@@ -44,35 +44,6 @@ elements.whipped_milk = {
 
     tempLow: 0,
     stateLow: "solid_milk",
+
+    hidden: false, // explicitly ensure it is visible in inventory
 };
-
-// Add whipping logic to milk
-elements.milk.tick = function(pixel) {
-    // If pixel is currently selected by Mix tool
-    if(pixelBeingMixed(pixel)) {
-        if(!pixel.whipTimer) {
-            pixel.whipTimer = 0;
-        }
-        pixel.whipTimer++;
-
-        // After 600 ticks (~10s), turn into whipped milk
-        if(pixel.whipTimer >= 600) {
-            changePixel(pixel, "whipped_milk");
-            return;
-        }
-    } else {
-        // Reset if not mixing
-        pixel.whipTimer = 0;
-    }
-
-    // Default liquid behavior
-    doDefaults(pixel);
-};
-
-// Helper: check if Mix tool is being used on this pixel
-function pixelBeingMixed(pixel) {
-    return currentTool === "mix" && mouseDown &&
-           mouseX >= pixel.x && mouseX < pixel.x+1 &&
-           mouseY >= pixel.y && mouseY < pixel.y+1;
-}
-
