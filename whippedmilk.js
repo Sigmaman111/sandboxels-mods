@@ -75,3 +75,4 @@ function pixelBeingMixed(pixel) {
            mouseX >= pixel.x && mouseX < pixel.x+1 &&
            mouseY >= pixel.y && mouseY < pixel.y+1;
 }
+
